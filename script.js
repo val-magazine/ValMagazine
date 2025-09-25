@@ -6,7 +6,7 @@ function normalizarTexto(txt) {
   return String(txt || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 }
 
-// Criar card de produto
+// Criar card
 function criarCard(produto) {
   const card = document.createElement('div');
   card.className = 'product-card';
@@ -16,7 +16,7 @@ function criarCard(produto) {
     <p>R$ ${produto.preco.toFixed(2)}</p>
     <button data-name="${produto.nome}">Adicionar ao Carrinho</button>
   `;
-  // Botão adicionar ao carrinho
+  // Botão dentro do card
   card.querySelector('button').addEventListener('click', () => {
     carrinho.push(produto);
     atualizarCarrinho();
@@ -32,7 +32,32 @@ function renderProdutos(produtos) {
   produtos.forEach(p => container.appendChild(criarCard(p)));
 }
 
-// Atualizar carrinho
+// Buscar JSON
+fetch('./produtos.json')
+  .then(res => res.json())
+  .then(data => {
+    produtosGlobal = data;
+    renderProdutos(produtosGlobal);
+  })
+  .catch(err => console.error('Erro ao carregar produtos:', err));
+
+// Filtro por categoria
+document.querySelectorAll('.category').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const cat = btn.getAttribute('data-category');
+    if(cat === 'all') renderProdutos(produtosGlobal);
+    else renderProdutos(produtosGlobal.filter(p => p.categoria === cat));
+  });
+});
+
+// Busca
+document.getElementById('search').addEventListener('input', (e) => {
+  const query = normalizarTexto(e.target.value);
+  const filtrados = produtosGlobal.filter(p => normalizarTexto(p.nome).includes(query));
+  renderProdutos(filtrados);
+});
+
+// Carrinho
 function atualizarCarrinho() {
   document.getElementById('cart-count').innerText = carrinho.length;
   const cartItems = document.getElementById('cart-items');
@@ -70,10 +95,20 @@ document.addEventListener('click', (e) => {
 document.getElementById('close-product-modal').addEventListener('click', () => {
   document.getElementById('product-modal').style.display = 'none';
 });
+
+// Modal Add ao carrinho
 document.getElementById('modal-add-cart').addEventListener('click', () => {
   carrinho.push(produtoModal);
   atualizarCarrinho();
   alert(`${produtoModal.nome} adicionado ao carrinho!`);
+});
+
+// Comprar via WhatsApp
+document.getElementById('checkout-btn').addEventListener('click', () => {
+  if(carrinho.length === 0) return alert('Carrinho vazio!');
+  let mensagem = 'Olá, quero comprar:%0A';
+  carrinho.forEach(p => mensagem += `${p.nome} - R$ ${p.preco.toFixed(2)}%0A`);
+  window.open(`https://wa.me/5547996000358?text=${mensagem}`, '_blank');
 });
 document.getElementById('modal-buy-btn').addEventListener('click', () => {
   carrinho.push(produtoModal);
@@ -81,28 +116,3 @@ document.getElementById('modal-buy-btn').addEventListener('click', () => {
   carrinho.forEach(p => mensagem += `${p.nome} - R$ ${p.preco.toFixed(2)}%0A`);
   window.open(`https://wa.me/5547996000358?text=${mensagem}`, '_blank');
 });
-
-// Busca
-document.getElementById('search').addEventListener('input', (e) => {
-  const query = normalizarTexto(e.target.value);
-  const filtrados = produtosGlobal.filter(p => normalizarTexto(p.nome).includes(query));
-  renderProdutos(filtrados);
-});
-
-// Filtro por categoria
-document.querySelectorAll('.category').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const cat = btn.getAttribute('data-category');
-    if(cat === 'all') renderProdutos(produtosGlobal);
-    else renderProdutos(produtosGlobal.filter(p => p.categoria === cat));
-  });
-});
-
-// **CARREGAR PRODUTOS JSON**
-fetch('produtos.json')
-  .then(res => res.json())
-  .then(data => {
-    produtosGlobal = data;
-    renderProdutos(produtosGlobal);
-  })
-  .catch(err => console.error('Erro ao carregar produtos:', err));
