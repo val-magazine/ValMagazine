@@ -1,5 +1,5 @@
 [
-  { "nome": "Bolsa c/ Corrente Dourada", "preco": 55.90, "imagem": "bolsacorrentedourada.jpg", "categoria": "bolsas" },
+  { "nome": "Bolsa c/ Corrente Dourada", "preco": 55.90, "imagem": "bolsacorrentedourada.jpg.jpeg", "categoria": "bolsas" },
   { "nome": "Caneca Time (Vasco)", "preco": 39.50, "imagem": "canecavasco.jpeg", "categoria": "canecas" },
   { "nome": "Carrinho Police Security Nova Toys", "preco": 38.50, "imagem": "carrinhopolicia.jpeg", "categoria": "brinquedos" },
   { "nome": "Kit Sensual", "preco": 99.90, "imagem": "imagens/hot1.jpg", "categoria": "hot" },
@@ -112,4 +112,5 @@
   { "nome": "Relógio Masculino Pulseira de Couro", "preco": 47.90, "imagem": "relogiopulseiracouro.jpeg", "categoria": "relogios" },
   { "nome": "Relógio Masculino Prata Quadrado", "preco": 35.90, "imagem": "relogioprataquadrado.jpeg", "categoria": "relogios" },
   { "nome": "Relógio Masculino Dual Time (Preto)", "preco": 30.90, "imagem": "relogiodualtime.jpeg", "categoria": "relogios" }
+
 ]
